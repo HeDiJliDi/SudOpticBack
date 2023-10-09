@@ -1,7 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+//builder.Services.AddDbContext<I2S_EconomatContext>(options =>
+//options.UseSqlServer(builder.Configuration.GetConnectionString("I2S_EconomatContext"),
+//builder => builder.EnableRetryOnFailure()));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -15,6 +17,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRouting();
+
+app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseHttpsRedirection();
 

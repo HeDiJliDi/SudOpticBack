@@ -1,0 +1,1 @@
+Scaffold-DbContext "server=192.168.1.200,1433;database=GrosOptiqueStandard;User ID=sa;Password=ideal2s;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;"Microsoft.EntityFrameworkCore.SqlServer   -OutputDir Models -ContextDir Context -Context I2S_SudOpticContext -force
