@@ -23,13 +23,20 @@ namespace Sud_Optic_Api.Controllers
 
         // GET: api/Articles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> GetArticles()
+        public async Task<ActionResult<IEnumerable<object>>> GetArticles()
         {
           if (_context.Articles == null)
           {
               return NotFound();
           }
-            return await _context.Articles.ToListAsync();
+            return  _context.Articles.Where(article=>article.Actif==true).Select(ar => new {
+                article=ar.CodeArticle,
+                reference=ar.Reference,
+                couleur=_context.Couleurs.Where(e=>e.CodeCouleur==ar.CodeCouleur).FirstOrDefault().Libelle,
+                famille=_context.FamilleArticles.Where(e=>e.CodeFamille==ar.CodeFamille).FirstOrDefault().Libelle,
+                designation=ar.Designation,
+                quantite=_context.Stocks.Where(e=>e.CodeArticle==ar.CodeArticle).FirstOrDefault().Quantite
+            }).ToList();
         }
 
         // GET: api/Articles/5
