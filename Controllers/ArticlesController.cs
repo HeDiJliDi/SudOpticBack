@@ -29,13 +29,13 @@ namespace Sud_Optic_Api.Controllers
           {
               return NotFound();
           }
-            return  _context.Articles.Where(article=>article.Actif==true).Select(ar => new {
-                article=ar.CodeArticle,
+            return  _context.Articles.Select(ar => new {
+                codeArticle=ar.CodeArticle,
                 reference=ar.Reference,
-                couleur=_context.Couleurs.Where(e=>e.CodeCouleur==ar.CodeCouleur).FirstOrDefault().Libelle,
-                famille=_context.FamilleArticles.Where(e=>e.CodeFamille==ar.CodeFamille).FirstOrDefault().Libelle,
-                designation=ar.Designation,
-                quantite=_context.Stocks.Where(e=>e.CodeArticle==ar.CodeArticle).FirstOrDefault().Quantite
+                couleur = _context.Couleurs.Where(e => e.CodeCouleur == ar.CodeCouleur).FirstOrDefault().Libelle ?? "",
+                famille = _context.FamilleArticles.Where(e => e.CodeFamille == ar.CodeFamille).FirstOrDefault().Libelle ?? "",
+                designation = ar.Designation,
+                quantite = 10
             }).ToList();
         }
 
