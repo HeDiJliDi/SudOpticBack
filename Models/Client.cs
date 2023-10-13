@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 
 namespace Sud_Optic_Api.Models;
@@ -110,4 +111,27 @@ public partial class Client
     public string CodeRaisonBlocageClient { get; set; } = null!;
 
     public DateTime DateCreation { get; set; }
+    public decimal GetMaxCodeClient()
+    {
+        decimal maxCodeClient = 0;
+        string connectionString = "server=192.168.1.200,1433;database=GrosOptiqueStandard;User ID=sa;Password=ideal2s;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True";
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            string sqlQuery = "SELECT MAX(CONVERT(Decimal, CodeClient)) AS CodeClient FROM [dbo].[Client]";
+
+            using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+            {
+                connection.Open();
+                object result = command.ExecuteScalar();
+
+                if (result != DBNull.Value)
+                {
+                    maxCodeClient = Convert.ToDecimal(result);
+                }
+            }
+        }
+
+        return maxCodeClient;
+    }
 }
+

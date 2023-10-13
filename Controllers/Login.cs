@@ -50,7 +50,9 @@ namespace Sud_Optic_Api.Controllers
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("NomUtilisateur", utilisateur.NomUtilisateur.ToString()),
                         new Claim("MotDePasse", utilisateur.MotDePasse),
-                        new Claim(ClaimTypes.Role,utilisateur.CodeFonction)
+                        new Claim(ClaimTypes.Role, utilisateur.CodeFonction),
+                        new Claim("CodeDepot", utilisateur.CodeDepot),
+                        new Claim("CodeLivreur", utilisateur.CodeLivreur),
                     };
                     var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 

@@ -32,11 +32,31 @@ namespace Sud_Optic_Api.Controllers
             return  _context.Articles.Select(ar => new {
                 codeArticle=ar.CodeArticle,
                 reference=ar.Reference,
-                couleur = _context.Couleurs.Where(e => e.CodeCouleur == ar.CodeCouleur).FirstOrDefault().Libelle ?? "",
-                famille = _context.FamilleArticles.Where(e => e.CodeFamille == ar.CodeFamille).FirstOrDefault().Libelle ?? "",
+                couleur =  ar.CodeCouleur ,
+                famille =   ar.CodeFamille,
                 designation = ar.Designation,
-                quantite = 10
+                quantite = 10,
+                prixVenteTTC=ar.PrixVenteTtc
             }).ToList();
+        }
+        [HttpGet("listArticleCommander/{codeLivreur}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetArticlesCommande(string codeLivreur)
+        { 
+            var codeDepot=_context.Livreurs.Where(c=>c.CodeLivreur==codeLivreur).FirstOrDefault().CodeDepot;
+            return _context.VueListeArticleAngulars
+            .Select(article => new
+            {
+                article,
+                Quantite = article.Qtmagsin - article.Qtreserver +
+                           (_context.Stocks
+                               .Where(stock => stock.CodeDepot == codeDepot && stock.CodeArticle == article.CodeArticle)
+                               .Select(stock => (int?)stock.Quantite)
+                               .FirstOrDefault() ?? 0),
+                PrixVenteTTC=_context.Articles.Where(e=>e.CodeArticle==article.CodeArticle).FirstOrDefault().PrixVenteTtc,
+            })
+            .Where(item => item.Quantite > 0)
+            .ToList();
+
         }
 
         // GET: api/Articles/5

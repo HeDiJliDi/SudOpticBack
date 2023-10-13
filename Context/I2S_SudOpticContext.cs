@@ -640,6 +640,8 @@ public partial class I2S_SudOpticContext : DbContext
 
     public virtual DbSet<VueListeArticle> VueListeArticles { get; set; }
 
+    public virtual DbSet<VueListeArticleAngular> VueListeArticleAngulars { get; set; }
+
     public virtual DbSet<VueListeArticleEnStockParDatePremierAchatEtDernierDateAchat> VueListeArticleEnStockParDatePremierAchatEtDernierDateAchats { get; set; }
 
     public virtual DbSet<VueListeArticleFournisseur> VueListeArticleFournisseurs { get; set; }
@@ -8488,6 +8490,29 @@ public partial class I2S_SudOpticContext : DbContext
                 .HasColumnType("numeric(9, 2)")
                 .HasColumnName("TauxTVA");
             entity.Property(e => e.ValeurUniteVente).HasColumnType("numeric(18, 5)");
+        });
+
+        modelBuilder.Entity<VueListeArticleAngular>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("Vue_ListeArticleAngular");
+
+            entity.Property(e => e.CodeArticle).HasMaxLength(30);
+            entity.Property(e => e.CodeCouleur).HasMaxLength(30);
+            entity.Property(e => e.CodeFamille).HasMaxLength(16);
+            entity.Property(e => e.CodeMarque).HasMaxLength(6);
+            entity.Property(e => e.Designation).HasMaxLength(300);
+            entity.Property(e => e.Qtglobal)
+                .HasColumnType("numeric(38, 3)")
+                .HasColumnName("QTGlobal");
+            entity.Property(e => e.Qtmagsin)
+                .HasColumnType("numeric(38, 3)")
+                .HasColumnName("QTMagsin");
+            entity.Property(e => e.Qtreserver)
+                .HasColumnType("numeric(38, 3)")
+                .HasColumnName("QTReserver");
+            entity.Property(e => e.Reference).HasMaxLength(30);
         });
 
         modelBuilder.Entity<VueListeArticleEnStockParDatePremierAchatEtDernierDateAchat>(entity =>
