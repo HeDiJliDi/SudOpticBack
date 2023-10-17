@@ -81,6 +81,48 @@ namespace Sud_Optic_Api.Controllers
 
             return NoContent();
         }
+        //[HttpPost("list")]
+        //public async Task<ActionResult<object>> GetListBonCommandeVente([FromBody] DateBonCommande B_Commande )
+
+        //{
+        //    var bnCmd= _context.BonCommandeVentes.Where(e => e.DateCreation < B_Commande.dateFin && e.DateCreation > B_Commande.dateDebut && e.CodeLivreur == B_Commande.codeLivreur).Select(aa => new {
+
+        //        numeroBonCommande = aa.NumeroBonCommandeVente,
+        //        nomClient = _context.Clients.Where(c => c.CodeClient == aa.CodeClient).FirstOrDefault().RaisonSociale,
+        //        totalTTc = aa.TotalTtc,
+        //        date = aa.DateCreation,
+
+
+        //    }).ToListAsync();
+        //    return bnCmd;
+
+
+        //}
+        [HttpPost("list")]
+        public async Task<ActionResult<object>> GetListBonCommandeVente([FromBody] DateBonCommande B_Commande)
+        {
+            var bnCmd = await _context.BonCommandeVentes
+                .Where(e => e.DateCreation < B_Commande.dateFin && e.DateCreation > B_Commande.dateDebut && e.CodeLivreur == B_Commande.codeLivreur)
+                .Select(aa => new
+                {
+                    numeroBonCommande = aa.NumeroBonCommandeVente,
+                    nomClient = _context.Clients.Where(c => c.CodeClient == aa.CodeClient).FirstOrDefault().RaisonSociale,
+                    totalTTc = aa.TotalTtc,
+                    date = aa.DateCreation // Ne pas formater ici
+                }).OrderByDescending(item => item.date)
+                .ToListAsync();
+
+            // Formater la date à l'extérieur de la requête
+            var formattedBnCmd = bnCmd.Select(item => new
+            {
+                item.numeroBonCommande,
+                item.nomClient,
+                item.totalTTc,
+                date = item.date.ToString("dd/MM/yyyy")
+            }).ToList();
+
+            return formattedBnCmd;
+        }
 
         // POST: api/BonCommandeVentes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

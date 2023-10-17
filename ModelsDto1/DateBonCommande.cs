@@ -2,5 +2,9 @@
 {
     public class DateBonCommande
     {
+        public DateTime dateDebut { get; set; }
+        public DateTime dateFin { get; set; }
+
+        public string codeLivreur { get; set; }
     }
 }

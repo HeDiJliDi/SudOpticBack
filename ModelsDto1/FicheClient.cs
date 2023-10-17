@@ -2,5 +2,8 @@
 {
     public class FicheClient
     {
+        public string codeClient { get; set; }
+        public DateTime dateDebut { get; set; }
+        public DateTime dateFin { get; set; }
     }
 }
