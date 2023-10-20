@@ -41,7 +41,8 @@ namespace Sud_Optic_Api.Controllers
         }
         [HttpGet("listArticleCommander/{codeLivreur}")]
         public async Task<ActionResult<IEnumerable<object>>> GetArticlesCommande(string codeLivreur)
-        { 
+        {
+           
             var codeDepot=_context.Livreurs.Where(c=>c.CodeLivreur==codeLivreur).FirstOrDefault().CodeDepot;
             return _context.VueListeArticleAngulars
             .Select(article => new
@@ -52,7 +53,12 @@ namespace Sud_Optic_Api.Controllers
                                .Where(stock => stock.CodeDepot == codeDepot && stock.CodeArticle == article.CodeArticle)
                                .Select(stock => (int?)stock.Quantite)
                                .FirstOrDefault() ?? 0),
-                PrixVenteTTC=_context.Articles.Where(e=>e.CodeArticle==article.CodeArticle).FirstOrDefault().PrixVenteTtc,
+                PrixVenteTTC =  _context.Articles.Where(e => e.CodeArticle == article.CodeArticle).FirstOrDefault().PrixVenteTtc,
+                PrixHt = _context.Articles.Where(e => e.CodeArticle == article.CodeArticle).FirstOrDefault().PrixVenteHt,
+                TauxTva = _context.Tvas.Where(e=>e.CodeTva== _context.Articles.Where(e => e.CodeArticle == article.CodeArticle).FirstOrDefault().CodeTva).FirstOrDefault().TauxTva,
+                Fodec = _context.Articles.Where(e => e.CodeArticle == article.CodeArticle).FirstOrDefault().Fodec,
+ 
+
             })
             .Where(item => item.Quantite > 0)
             .ToList();
